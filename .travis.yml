@@ -1,5 +1,5 @@
-sudo: required 
 language: node_js
+sudo: required 
 node_js:
     - "stable"
     
@@ -9,18 +9,18 @@ services:
 before_install: 
     - docker build -t spolyniak/test-docker-app -f Dockerfile.dev .
 
-  .script:     
-    - docker run -e CI=true spolyniak/test-docker-app npm run test -- --coverage
+.script:     
+- docker run -e CI=true spolyniak/test-docker-app npm run test -- --coverage
 
-deploy: #This deploys the whole folder onto elasticbeanstalk so it's the production Dockerfile that would be used by elasticbeanstalk to startup this app
+deploy: 
     provider: elasticbeanstalk
-    region: "us-west-2" #region you selected when creating the elb application
-    app: "test-docker-app" #the aws elb app name
-    env: "Testdockerapp-env" #the aws elb app environment
-    bucket_name: "elasticbeanstalk-us-west-2-979723554484" #s3 storage location for all apps deployed to this region
-    bucket_path: "test-docker-app" #name of the folder where this app you're targeting is located or going to exist
+    region: "us-west-2" 
+    app: "test-docker-app" 
+    env: "Testdockerapp-env" 
+    bucket_name: "elasticbeanstalk-us-west-2-979723554484" 
+    bucket_path: "test-docker-app" 
     on:
-        branch: master #Only deploy when master branch is updated
-    access_key_id: $AWS_ACCESS_KEY #Environment variable generated in IAM of AWS but stored in travis ci
+        branch: master 
+    access_key_id: $AWS_ACCESS_KEY 
     secret_access_key:
-        secure: "$AWS_SECRET_KEY" # Another environment variable generated in IAM of AWS but stored in travis ci
+        secure: "$AWS_SECRET_KEY" 
